@@ -4,11 +4,14 @@ from scipy.optimize import curve_fit
 
 
 class Fits:
-    def linear(X: npt.ArrayLike, Y: npt.ArrayLike, yerr: npt.ArrayLike | None):
+    def linear(X: npt.ArrayLike, Y: npt.ArrayLike, yerr: npt.ArrayLike | None = None):
         def curve(x, a, b):
             return a * x + b
 
-        param, cov = curve_fit(curve, X, Y, p0=[5, 0], sigma=yerr)
+        if yerr == None:
+            param, cov = curve_fit(curve, X, Y, p0=[5, 0])
+        else:
+            param, cov = curve_fit(curve, X, Y, p0=[5, 0], sigma=yerr)
         std_dev = np.sqrt(np.diag(cov))
 
         return param, std_dev
